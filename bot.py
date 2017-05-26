@@ -81,22 +81,25 @@ def commomResponse(msg,event):
             sendMsg('http://music.163.com/#/song?id=' + str(api.search.songs(msg['Text'], 1)[0]['id']), msg)
         elif '种子'in  msg["Text"][:3] and (len(msg['Text']) > 3):
             msg["Text"] = msg["Text"][3:]
-            sendMsg('http://bthub.io/search?key=' + str(quote(msg['Text'])), msg)
+            sendMsg('http://www.diaosisou.net/list/' + str(quote(msg['Text'])), msg)
         elif '看图' in msg["Text"]:
             msg["Text"] = msg["Text"][2:]
             if '美女' in msg['Text']:
                 imgList = json.loads(requests.get('http://www.tngou.net/tnfs/api/news?id='+str(random.randint(1,1000))+'&rows=10').text)
                 if len(imgList)  != 0:
                     imgLink = 'http://tnfs.tngou.net/image/' + str(imgList['tngou'][random.randint(0,len(imgList))]['img'])
-                    imgFileDir = downloadImageFile('belle',imgLink,str(time.strftime('%Y%m%d-%H%M%S',time.localtime(time.time())))+'.jpg')
+                    try:
+                        imgFileDir = downloadImageFile('belle',imgLink,str(time.strftime('%Y%m%d-%H%M%S',time.localtime(time.time())))+'.jpg')
+                    except:
+                        itchat.send_msg('没有，快滚', toUserName=msg['FromUserName'])
                     if imgFileDir != None:
                         itchat.send_image(imgFileDir, toUserName=msg['FromUserName'])
                     else:
-                        itchat.send_image('emoji\\170523-153244.gif', toUserName=msg['FromUserName'])
+                        itchat.send_msg('没有，快滚', toUserName=msg['FromUserName'])
                 else:
-                    itchat.send_image('emoji\\170523-153244.gif', toUserName=msg['FromUserName'])
+                    itchat.send_msg('没有，快滚', toUserName=msg['FromUserName'])
             else:
-                itchat.send_image('emoji\\170523-153244.gif', toUserName=msg['FromUserName'])
+                itchat.send_msg('没有，快滚', toUserName=msg['FromUserName'])
         else:
             if (msg["Text"][:3] == '图灵:' or msg["Text"][:3] == '图灵：') and (len(msg['Text']) > 3):
                 msg["Text"] = msg["Text"][3:]
@@ -229,8 +232,8 @@ if not os.path.exists('emoji'):
     os.mkdir('emoji')
 
 # 判断 bello 文件夹是否存在  存放美女图片
-if not os.path.exists('bello'):
-    os.mkdir('bello')
+if not os.path.exists('belle'):
+    os.mkdir('belle')
 
 #  线程标志
 event = Event()
