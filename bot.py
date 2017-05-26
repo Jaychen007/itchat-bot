@@ -54,7 +54,7 @@ def getTulingResponse(msg):
     print(info)
     url = "http://www.tuling123.com/openapi/api"
     data = {
-        "key": "b265a58515ef46f8beb2deb0731f2c70",
+        "key": tulingkey,
         "info": info,
         "userid": msg['FromUserName']
     }
